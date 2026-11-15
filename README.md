@@ -6,10 +6,10 @@
 
 **48 echte OpenStreetMap-Campusse · Online-Rangliste · Deutsch / 中文 / English**
 
-[![▶ Jetzt spielen](https://img.shields.io/badge/▶%20JETZT%20SPIELEN-ff6a00?style=for-the-badge)](https://markszt.github.io/bengda/)
-[![Maps](https://img.shields.io/badge/MAPS-48-2ea043?style=for-the-badge)](https://markszt.github.io/bengda/)
-[![Languages](https://img.shields.io/badge/LANGUAGES-DE%20%7C%20中文%20%7C%20EN-0969da?style=for-the-badge)](https://markszt.github.io/bengda/)
-[![Stars](https://img.shields.io/github/stars/markszt/bengda?style=for-the-badge&color=ffb37a)](https://github.com/markszt/bengda/stargazers)
+[![▶ Jetzt spielen](https://img.shields.io/badge/▶%20JETZT%20SPIELEN-ff6a00?style=for-the-badge)](https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/)
+[![Maps](https://img.shields.io/badge/MAPS-48-2ea043?style=for-the-badge)](https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/)
+[![Languages](https://img.shields.io/badge/LANGUAGES-DE%20%7C%20中文%20%7C%20EN-0969da?style=for-the-badge)](https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/)
+[![Stars](https://img.shields.io/github/stars/markszt/bengda?style=for-the-badge&color=ffb37a)](https://github.com/markszt/BENGDA-Campus-Abriss-Simulator/stargazers)
 
 [Deutsch](#deutsch) · [中文](#中文) · [English](#english)
 
@@ -31,7 +31,7 @@
 
 **BENGDA — Campus Abriss** ist ein kostenloses 3D-Browserspiel: Zerstöre Gebäude auf echten Campus-Karten, sammle Schaden und kämpfe mit deiner Hochschule in der Online-Rangliste.
 
-**Spielen:** https://markszt.github.io/bengda/
+**Spielen:** https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/
 
 ### Funktionen
 
@@ -48,7 +48,7 @@
 
 ### Schnellstart
 
-1. https://markszt.github.io/bengda/ öffnen
+1. https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/ öffnen
 2. Campus auswählen
 3. **SPIELEN** drücken
 4. Gebäude zerstören und Schaden sammeln
@@ -93,7 +93,7 @@ Inoffizielles Fan-Projekt. Keine Verbindung zu den genannten Hochschulen. Alle C
 
 **BENGDA — 校园拆除**是一个免费的 3D 浏览器游戏：在真实校园地图上破坏建筑、累计伤害，并让你的大学参与在线排行榜。
 
-**开始游戏：** https://markszt.github.io/bengda/
+**开始游戏：** https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/
 
 ### 功能
 
@@ -110,7 +110,7 @@ Inoffizielles Fan-Projekt. Keine Verbindung zu den genannten Hochschulen. Alle C
 
 ### 快速开始
 
-1. 打开 https://markszt.github.io/bengda/
+1. 打开 https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/
 2. 选择大学
 3. 点击 **SPIELEN**
 4. 破坏建筑、累计伤害
@@ -155,7 +155,7 @@ Inoffizielles Fan-Projekt. Keine Verbindung zu den genannten Hochschulen. Alle C
 
 **BENGDA — Campus Demolition** is a free 3D browser game. Destroy buildings on real OpenStreetMap campus maps, deal damage, and compete for your university on the online leaderboard.
 
-**Play:** https://markszt.github.io/bengda/
+**Play:** https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/
 
 ### Features
 
@@ -170,7 +170,7 @@ Inoffizielles Fan-Projekt. Keine Verbindung zu den genannten Hochschulen. Alle C
 
 ### Quick start
 
-1. Open https://markszt.github.io/bengda/
+1. Open https://markszt.github.io/BENGDA-Campus-Abriss-Simulator/
 2. Choose a campus
 3. Press **SPIELEN**
 4. Destroy buildings and collect damage
