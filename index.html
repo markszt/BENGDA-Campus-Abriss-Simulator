@@ -5007,7 +5007,6 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     verb.connect(wet); wet.connect(comp);
     master.connect(comp); comp.connect(ctx.destination);
     noise = makeNoise(2.5);
-    try { if (window.CAMPUS && window.CAMPUS.state) window.CAMPUS.state.sound = false; } catch (e) { /* ignore */ }
   }
   function now() { return ctx ? ctx.currentTime : 0; }
   function panner(pan) {
@@ -5206,7 +5205,6 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     verb=ctx.createConvolver();verb.buffer=ir;wet=ctx.createGain();wet.gain.value=.16;verb.connect(wet);wet.connect(master);
     noise=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const nd=noise.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
     for(const k in RAW){try{const pcm=new Int16Array(b64ToBuf(RAW[k]));const ab=ctx.createBuffer(1,pcm.length,SR);const ch=ab.getChannelData(0);for(let i=0;i<pcm.length;i++)ch[i]=pcm[i]/32768;buffers[k]=ab;}catch(e){}}
-    try{if(window.CAMPUS&&CAMPUS.state)CAMPUS.state.sound=false;}catch(e){}
     return ctx;
   }
   function play(name,gain=1,pan=0,delay=0,rate=1,duration=0,offset=0){
