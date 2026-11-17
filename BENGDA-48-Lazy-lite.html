@@ -7040,6 +7040,7 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
       url.searchParams.delete('v');
       url.searchParams.delete('play');
       url.searchParams.set('campus', id);
+      url.searchParams.set('play', '1');
       location.href = url.toString();
     } catch (e) {}
   }
