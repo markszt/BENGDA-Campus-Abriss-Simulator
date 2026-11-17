@@ -7121,6 +7121,34 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
         <div class="rank-hp">${fmt(row.totalDamage)}<small> ${esc(d.dmg)}</small></div>`;
       list.appendChild(el);
     }
+    // Keep the player's own campus visible even when it is outside the top 3.
+    if (!expanded && window.CAMPUS) {
+      const currentId = window.CAMPUS.campusId;
+      const currentIndex = rows.findIndex(r => r.campusId === currentId);
+      if (currentIndex >= 3) {
+        const row = rows[currentIndex];
+        const name = localizedCampus(row.campusId, row.name);
+        const pct = Math.max(0, Math.min(100, (Number(row.totalDamage) || 0) / max * 100));
+        const zh = window.__bengdaIa && window.__bengdaIa[row.campusId];
+        const city = lang() === 'zh' && zh ? zh[1] : row.city;
+        const sub = `${row.runs || 0} ${d.runs}${city ? ' · ' + city : ''}`;
+        const el = document.createElement('div');
+        el.className = 'rank-row online-row rank-current-row';
+        el.style.cursor = 'pointer';
+        el.style.setProperty('display', 'flex', 'important');
+        el.dataset.campusId = row.campusId;
+        el.title = name;
+        el.addEventListener('click', () => openCampus(row.campusId));
+        el.innerHTML = `<div class="rank-no">${currentIndex + 1}</div>
+          <div class="rank-main">
+            <div class="rank-name">${esc(name)}</div>
+            <div class="rank-sub">${esc(sub)}</div>
+            <div class="rank-bar"><i style="width:${pct.toFixed(1)}%"></i></div>
+          </div>
+          <div class="rank-hp">${fmt(row.totalDamage)}<small> ${esc(d.dmg)}</small></div>`;
+        list.appendChild(el);
+      }
+    }
   }
 
   async function refresh(){
