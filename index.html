@@ -7090,11 +7090,19 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
     list.classList.add('rank-ready');
     list.classList.toggle('bengda-all', expanded);
     list.innerHTML = '';
-    const rows = rankRowsLocal();
+    const allRows = rankRowsLocal();
+    allRows.forEach((r, i) => { r.__rank = i; });
+    const q = (window.__bengdaSearchQuery || '').toLowerCase();
+    const rows = q ? allRows.filter(r => {
+      const c = (window.CAMPUS?.campuses || []).find(x => x.id === r.campusId);
+      const local = localizedCampus(r.campusId, r.name);
+      const city = (window.__bengdaIa && window.__bengdaIa[r.campusId]) ? window.__bengdaIa[r.campusId][1] : (r.city || '');
+      return ((r.campusId || '') + ' ' + (r.name || '') + ' ' + (c?.name || '') + ' ' + local + ' ' + (r.city || '') + ' ' + city).toLowerCase().includes(q);
+    }) : allRows;
     const expBtn = document.getElementById('rank-expand');
-    if (expBtn) expBtn.style.display = rows.length > 3 ? '' : 'none';
+    if (expBtn) expBtn.style.display = allRows.length > 3 ? '' : 'none';
     if (!rows.length) {
-      list.innerHTML = `<div class="rank-empty">${esc(window.__onlineError ? d.error : d.empty)}</div>`;
+      list.innerHTML = `<div class="rank-empty">${esc(d.empty)}</div>`;
       return;
     }
     const visibleRows = expanded ? rows : rows.slice(0, 3);
@@ -7112,7 +7120,7 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
       el.dataset.campusId = row.campusId;
       el.title = name;
       el.addEventListener('click', () => openCampus(row.campusId));
-      el.innerHTML = `<div class="rank-no">${rowIndex + 1}</div>
+      el.innerHTML = `<div class="rank-no">${row.__rank + 1}</div>
         <div class="rank-main">
           <div class="rank-name">${esc(name)}</div>
           <div class="rank-sub">${esc(sub)}</div>
@@ -7139,7 +7147,7 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
         el.dataset.campusId = row.campusId;
         el.title = name;
         el.addEventListener('click', () => openCampus(row.campusId));
-        el.innerHTML = `<div class="rank-no">${currentIndex + 1}</div>
+        el.innerHTML = `<div class="rank-no">${row.__rank + 1}</div>
           <div class="rank-main">
             <div class="rank-name">${esc(name)}</div>
             <div class="rank-sub">${esc(sub)}</div>
@@ -7227,6 +7235,15 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
     if (!window.__rankLocalTimer) window.__rankLocalTimer = setInterval(() => {
       if (!document.hidden && window.CAMPUS && window.CAMPUS.state && window.CAMPUS.state.started) render();
     }, 2000);
+    const searchInput = document.getElementById('campus-search');
+    if (searchInput && !searchInput.dataset.rankSearch) {
+      searchInput.dataset.rankSearch = '1';
+      searchInput.addEventListener('input', () => {
+        window.__bengdaSearchQuery = searchInput.value.trim().toLowerCase();
+        render();
+      });
+    }
+    window.addEventListener('bengda-search', render);
     for (const id of ['reset', 'end-reset']) {
       const b = document.getElementById(id);
       if (b) b.addEventListener('click', () => { setTimeout(refresh, 900); }, true);
