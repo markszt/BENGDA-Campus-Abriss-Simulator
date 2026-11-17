@@ -6630,7 +6630,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     const damage = Math.max(0, gameDamage() - run.startDamage);
     const elapsedClient = Math.max(1, Math.round((Date.now() - run.startClientTime) / 1000));
     // Do not submit absurdly short runs; the server would reject them anyway.
-    if (elapsedClient < 1) {
+    if (elapsedClient < 5) {
       state.run = null;
       return { skipped: true, reason: 'too-short' };
     }
@@ -6701,7 +6701,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
       } finally {
         state.busy = false;
       }
-    }, 4000);
+    }, 5000);
   }
 
   async function deleteData() {
