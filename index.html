@@ -5096,7 +5096,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     const i = btns.findIndex(b => b.classList.contains('active'));
     return i >= 0 ? i : 0;
   }
-  const KINDS = ['shotgun', 'football', 'laser', 'meteor', 'shower', 'nuke', 'blackhole', 'storm'];
+  const KINDS = ['shotgun', 'football', 'laser', 'meteor', 'shower', 'storm', 'blackhole', 'nuke'];
   function weaponKind() { return KINDS[weaponIndex()] || 'shotgun'; }
   function startBeam() {
     if (!ctx || muted || beam) return;
@@ -5659,7 +5659,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   function boot(){
     if(!window.CAMPUS){setTimeout(boot,400);return;}
     addStyle();addCredits();addGrade();addSort();addControls();addNukeFx();
-    applyAll(); sync68(); applyAll();
+    applyAll(); applyAll();
     document.querySelectorAll('.lang').forEach(b=>b.addEventListener('click',()=>setTimeout(applyAll,350)));
     const fx=document.getElementById('fx-toggle'); if(fx)fx.addEventListener('click',()=>setTimeout(setSkillButton,0),true);
     setInterval(applyAll,1800);
