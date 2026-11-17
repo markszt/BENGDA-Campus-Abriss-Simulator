@@ -5096,7 +5096,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     const i = btns.findIndex(b => b.classList.contains('active'));
     return i >= 0 ? i : 0;
   }
-  const KINDS = ['shotgun', 'football', 'laser', 'meteor', 'shower', 'storm', 'blackhole', 'nuke'];
+  const KINDS = ['shotgun', 'football', 'laser', 'meteor', 'shower', 'nuke', 'blackhole', 'storm'];
   function weaponKind() { return KINDS[weaponIndex()] || 'shotgun'; }
   function startBeam() {
     if (!ctx || muted || beam) return;
@@ -5122,12 +5122,14 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   }
   function bind() {
     const play = document.getElementById('play');
-    if (play) play.addEventListener('click', () => { init(); setTimeout(() => { try { if (window.CAMPUS) window.CAMPUS.state.sound = false; } catch (e) {} }, 0); }, { capture: true });
+    if (play) play.addEventListener('click', () => { init(); setTimeout(() => { try { } catch (e) {} }, 0); }, { capture: true });
     const canvas = document.querySelector('#stage canvas') || document.querySelector('canvas');
     if (canvas) canvas.addEventListener('pointerdown', (e) => { if (e.button === 0) triggerShot(); }, { capture: true });
+    window.addEventListener('pointerdown', init, { once: true, capture: true });
     window.addEventListener('keydown', (e) => {
+      init();
       if (e.key.toLowerCase() !== 'e' || e.repeat) return;
-      init(); const k = weaponKind();
+      const k = weaponKind();
       if (k === 'laser') startBeam(); else shot(k);
     }, { capture: true });
     window.addEventListener('keyup', (e) => { if (e.key.toLowerCase() === 'e') stopBeam(); }, { capture: true });
@@ -7021,7 +7023,6 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
       url.searchParams.delete('v');
       url.searchParams.delete('play');
       url.searchParams.set('campus', id);
-      url.searchParams.set('play', '1');
       location.href = url.toString();
     } catch (e) {}
   }
@@ -7134,6 +7135,7 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
   }
 
   function boot(){
+    if(!window.CAMPUS){setTimeout(boot,200);return;}
     ensureEmptyCss();
     ensureHudRank();
     bindButtons();
