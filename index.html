@@ -7170,11 +7170,15 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
   }
 
   function boot(){
+    if (!window.CAMPUS) { setTimeout(boot, 300); return; }
     ensureEmptyCss();
     ensureHudRank();
     bindButtons();
     applyLabels();
-    setTimeout(refresh, 1000);
+    setTimeout(() => {
+      refresh();
+      setTimeout(() => { if (!window.__onlineRows || !window.__onlineRows.length) refresh(); }, 2500);
+    }, 900);
     window.addEventListener('fhac-online-report', (event) => {
       const gained = Number(event.detail && event.detail.damage) || 0;
       if (gained > 0) { hudBonus += gained; renderHudRank(); render(); }
