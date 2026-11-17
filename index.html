@@ -6820,7 +6820,12 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
           const game = window.CAMPUS && window.CAMPUS.state;
           const dmg = Number(game && game.damage) || 0;
           if (dmg > 0 && !state.run && !state.starting && !state.busy) {
-            startRun().then(() => startAuto()).catch((err) => { state.lastError = err; });
+            startRun().then(() => {
+              // This fallback starts after the first damage was already dealt.
+              // For the first run, count from zero so that initial damage is not lost.
+              if (state.run && state.submittedDamage === 0) state.run.startDamage = 0;
+              startAuto();
+            }).catch((err) => { state.lastError = err; });
           }
         } catch (e) {}
       }, 1200);
