@@ -7179,6 +7179,15 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
       refresh();
       setTimeout(() => { if (!window.__onlineRows || !window.__onlineRows.length) refresh(); }, 2500);
     }, 900);
+    // Watchdog: if the first snapshot was requested before the API client was
+    // ready, retry until the leaderboard actually has rows.
+    let __bootTries = 0;
+    const __bootTimer = setInterval(() => {
+      if (window.__onlineRows && window.__onlineRows.length) { clearInterval(__bootTimer); return; }
+      loading = false;
+      refresh();
+      if (++__bootTries > 8) clearInterval(__bootTimer);
+    }, 2000);
     window.addEventListener('fhac-online-report', (event) => {
       const gained = Number(event.detail && event.detail.damage) || 0;
       if (gained > 0) { hudBonus += gained; renderHudRank(); render(); }
