@@ -6753,13 +6753,37 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   function bindOnce() {
     if (window.__fhacOnlineBound) return;
     window.__fhacOnlineBound = true;
+    function beaconFinish() {
+      if (!state.run || state.run.reported) return false;
+      const damage = Math.max(0, gameDamage() - state.run.startDamage);
+      if (damage < 1) return false;
+      try {
+        const payload = JSON.stringify({
+          playerId: playerId(),
+          nonce: state.run.nonce,
+          damage,
+          campusId: state.run.campusId || currentCampusId(),
+          gameVersion: '2.05'
+        });
+        const ok = navigator.sendBeacon && navigator.sendBeacon(apiBase + '/api/runs', new Blob([payload], { type: 'application/json' }));
+        if (ok) {
+          state.run.reported = true;
+          state.submittedDamage += damage;
+          state.run = null;
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
     window.addEventListener('pagehide', () => {
       stopAuto();
+      if (beaconFinish()) return;
       if (state.run && !state.run.reported) finishRun('pagehide').catch(() => {});
     });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden || !state.run || state.run.reported) return;
       stopAuto();
+      if (beaconFinish()) return;
       finishRun('hidden').catch(() => {});
     });
   }
