@@ -6672,6 +6672,11 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
 
   function startAuto() {
     stopAuto();
+    // If the very first run was created after the player had already dealt
+    // damage, do not use that damage as the baseline.
+    if (state.run && state.submittedDamage === 0 && state.run.startDamage > 0) {
+      state.run.startDamage = 0;
+    }
     state.autoTimer = setInterval(async () => {
       if (state.busy || !state.run) return;
       const game = window.CAMPUS && window.CAMPUS.state;
