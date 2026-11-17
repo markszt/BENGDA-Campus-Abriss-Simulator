@@ -4997,6 +4997,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     ctx = new AC();
+    try { if (ctx.state === 'suspended') ctx.resume(); } catch (e) {}
     comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -12; comp.knee.value = 18; comp.ratio.value = 5;
     comp.attack.value = 0.005; comp.release.value = 0.25;
@@ -5116,6 +5117,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   }
   function triggerShot() {
     init(); if (!ctx) return;
+    try { if (ctx.state === 'suspended') ctx.resume(); } catch (e) {}
     const k = weaponKind();
     shot(k);
     if (k === 'laser') { startBeam(); setTimeout(stopBeam, 220); }
@@ -5158,6 +5160,9 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     };
     requestAnimationFrame(watch);
   }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(ev => {
+    window.addEventListener(ev, init, { capture: true, once: true });
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind); else bind();
 })();
 
