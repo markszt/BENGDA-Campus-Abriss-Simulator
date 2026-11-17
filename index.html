@@ -6812,6 +6812,19 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
       } catch (e) {}
       setTimeout(watchAutoStart, 700);
     }, 350);
+    // Extra safety net: start a run as soon as the player has dealt damage,
+    // even if the auto-start watcher missed the initial state transition.
+    if (!window.__fhacDamageWatch) {
+      window.__fhacDamageWatch = setInterval(() => {
+        try {
+          const game = window.CAMPUS && window.CAMPUS.state;
+          const dmg = Number(game && game.damage) || 0;
+          if (dmg > 0 && !state.run && !state.starting && !state.busy) {
+            startRun().then(() => startAuto()).catch((err) => { state.lastError = err; });
+          }
+        } catch (e) {}
+      }, 1200);
+    }
     for (const id of ['reset', 'end-reset']) {
       const button = document.getElementById(id);
       if (button) {
