@@ -5117,10 +5117,16 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   }
   function triggerShot() {
     init(); if (!ctx) return;
-    try { if (ctx.state === 'suspended') ctx.resume(); } catch (e) {}
-    const k = weaponKind();
-    shot(k);
-    if (k === 'laser') { startBeam(); setTimeout(stopBeam, 220); }
+    const fire = () => {
+      const k = weaponKind();
+      shot(k);
+      if (k === 'laser') { startBeam(); setTimeout(stopBeam, 220); }
+    };
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(fire).catch(fire);
+    } else {
+      fire();
+    }
   }
   function bind() {
     const play = document.getElementById('play');
@@ -5131,8 +5137,12 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     window.addEventListener('keydown', (e) => {
       init();
       if (e.key.toLowerCase() !== 'e' || e.repeat) return;
-      const k = weaponKind();
-      if (k === 'laser') startBeam(); else shot(k);
+      const fireKey = () => {
+        const k = weaponKind();
+        if (k === 'laser') startBeam(); else shot(k);
+      };
+      if (ctx && ctx.state === 'suspended') ctx.resume().then(fireKey).catch(fireKey);
+      else fireKey();
     }, { capture: true });
     window.addEventListener('keyup', (e) => { if (e.key.toLowerCase() === 'e') stopBeam(); }, { capture: true });
     const soundBtn = document.getElementById('sound');
