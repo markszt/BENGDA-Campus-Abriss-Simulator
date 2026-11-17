@@ -5133,21 +5133,18 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   }
   function triggerShot() {
     init(); if (!ctx) return;
-    try { if (ctx.state === 'suspended') ctx.resume(); } catch (e) {}
     const k = weaponKind();
     shot(k);
     if (k === 'laser') { startBeam(); setTimeout(stopBeam, 220); }
   }
   function bind() {
     const play = document.getElementById('play');
-    if (play) play.addEventListener('click', () => { init(); setTimeout(() => { try { } catch (e) {} }, 0); }, { capture: true });
+    if (play) play.addEventListener('click', () => { init(); setTimeout(() => { try { if (window.CAMPUS) window.CAMPUS.state.sound = false; } catch (e) {} }, 0); }, { capture: true });
     const canvas = document.querySelector('#stage canvas') || document.querySelector('canvas');
     if (canvas) canvas.addEventListener('pointerdown', (e) => { if (e.button === 0) triggerShot(); }, { capture: true });
-    window.addEventListener('pointerdown', init, { once: true, capture: true });
     window.addEventListener('keydown', (e) => {
-      init();
       if (e.key.toLowerCase() !== 'e' || e.repeat) return;
-      const k = weaponKind();
+      init(); const k = weaponKind();
       if (k === 'laser') startBeam(); else shot(k);
     }, { capture: true });
     window.addEventListener('keyup', (e) => { if (e.key.toLowerCase() === 'e') stopBeam(); }, { capture: true });
@@ -5209,6 +5206,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
     verb=ctx.createConvolver();verb.buffer=ir;wet=ctx.createGain();wet.gain.value=.16;verb.connect(wet);wet.connect(master);
     noise=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const nd=noise.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
     for(const k in RAW){try{const pcm=new Int16Array(b64ToBuf(RAW[k]));const ab=ctx.createBuffer(1,pcm.length,SR);const ch=ab.getChannelData(0);for(let i=0;i<pcm.length;i++)ch[i]=pcm[i]/32768;buffers[k]=ab;}catch(e){}}
+    try{if(window.CAMPUS&&CAMPUS.state)CAMPUS.state.sound=false;}catch(e){}
     return ctx;
   }
   function play(name,gain=1,pan=0,delay=0,rate=1,duration=0,offset=0){
@@ -5678,7 +5676,7 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   function boot(){
     if(!window.CAMPUS){setTimeout(boot,400);return;}
     addStyle();addCredits();addGrade();addSort();addControls();addNukeFx();
-    applyAll(); applyAll();
+    applyAll(); sync68(); applyAll();
     document.querySelectorAll('.lang').forEach(b=>b.addEventListener('click',()=>setTimeout(applyAll,350)));
     const fx=document.getElementById('fx-toggle'); if(fx)fx.addEventListener('click',()=>setTimeout(setSkillButton,0),true);
     setInterval(applyAll,1800);
@@ -6755,13 +6753,37 @@ totalEmissiveRadiance += gLava;`)};let M=new ke(d,f);M.position.y=0,M.receiveSha
   function bindOnce() {
     if (window.__fhacOnlineBound) return;
     window.__fhacOnlineBound = true;
+    function beaconFinish(reason) {
+      if (!state.run || state.run.reported) return false;
+      const damage = Math.max(0, gameDamage() - state.run.startDamage);
+      if (damage < 1) return false;
+      try {
+        const payload = JSON.stringify({
+          playerId: playerId(),
+          nonce: state.run.nonce,
+          damage,
+          campusId: state.run.campusId || currentCampusId(),
+          gameVersion: '2.05'
+        });
+        const ok = navigator.sendBeacon && navigator.sendBeacon(apiBase + '/api/runs', new Blob([payload], { type: 'application/json' }));
+        if (ok) {
+          state.run.reported = true;
+          state.submittedDamage += damage;
+          state.run = null;
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
     window.addEventListener('pagehide', () => {
       stopAuto();
+      if (beaconFinish('pagehide')) return;
       if (state.run && !state.run.reported) finishRun('pagehide').catch(() => {});
     });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden || !state.run || state.run.reported) return;
       stopAuto();
+      if (beaconFinish('hidden')) return;
       finishRun('hidden').catch(() => {});
     });
   }
@@ -7153,7 +7175,6 @@ try{FHACOnline.configure({apiBase:'https://fh-aachen-leaderboard.markszt0311-a52
   }
 
   function boot(){
-    if(!window.CAMPUS){setTimeout(boot,200);return;}
     ensureEmptyCss();
     ensureHudRank();
     bindButtons();
